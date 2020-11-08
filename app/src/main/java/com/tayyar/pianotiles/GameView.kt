@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.media.AudioManager
 import android.media.SoundPool
+import android.os.Vibrator
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
@@ -22,6 +23,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     private var tiles = LinkedList<Tile>()
     private var tempTiles = CopyOnWriteArrayList<Tile>()
+
+    private var vibrator: Vibrator? = null
 
     private var blackPaint = Paint()
     private var grayPaint = Paint()
@@ -42,9 +45,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     private var scoreSize = 100f
     private var backGroundColor = Color.WHITE
 
-    private var soundPool: SoundPool
-    private var failSound: Int
-    private var tileSound: Int
+    private var soundPool: SoundPool? = null
+    private var failSound: Int? = null
+    private var tileSound: Int? = null
 
     init {
 
@@ -62,22 +65,34 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         scorePaint.textSize = scoreSize
 
-        soundPool = SoundPool(6, AudioManager.STREAM_MUSIC, 0)
+        if (music && soundPool == null) {
+            soundPool = SoundPool(20, AudioManager.STREAM_MUSIC, 0)
+            if (failSound == null) {
+                failSound = soundPool?.load(context, R.raw.failsound, 1)
+            }
 
-        failSound = soundPool.load(context, R.raw.failsound, 1)
+            if (tileSound == null) {
+                tileSound = soundPool?.load(context, R.raw.a, 1)
+            }
+        }
 
-        tileSound = soundPool.load(context, R.raw.a, 1)
-
+        if (vibration) {
+            vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
     }
 
     companion object {
         var score = 0
         val screenWidth = Resources.getSystem().displayMetrics.widthPixels
         val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+        var music = true
+        var vibration = true
     }
 
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
+
+        score = 0
 
         row = (0..3).random()
 
@@ -116,19 +131,13 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         // stop the game
         if (gameOver) {
-            soundPool.play(failSound, 1f, 1f,0,0, 1f)
+            soundPool?.play(failSound!!, 1f, 1f,0,0, 1f)
             Tile.speed = 0
             thread.setRunning(false)
             //thread.join()
         }
 
-        // paint the background
-        canvas.drawColor(backGroundColor)
-
-        // alignment lines
-        canvas.drawLine(screenWidth.toFloat()/4, 0f, screenWidth.toFloat()/4, screenHeight.toFloat(), blackPaint)
-        canvas.drawLine(screenWidth.toFloat()/2, 0f, screenWidth.toFloat()/2, screenHeight.toFloat(), blackPaint)
-        canvas.drawLine(3*screenWidth.toFloat()/4, 0f, 3*screenWidth.toFloat()/4, screenHeight.toFloat(), blackPaint)
+        drawLines(canvas)
 
         // remove the tiles that are out of screen from tiles list
         if (tiles.first.outOfScreen) {
@@ -159,6 +168,20 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             2 -> canvas.drawRect(Rect(screenWidth/2, startY, screenWidth*3/4, endY), redPaint)
             3 -> canvas.drawRect(Rect(screenWidth*3/4, startY, screenWidth, endY), redPaint)
         }
+        drawScore(canvas)
+    }
+
+    fun drawLines(canvas: Canvas) {
+        // paint the background
+        canvas.drawColor(backGroundColor)
+
+        // alignment lines
+        canvas.drawLine(screenWidth.toFloat()/4, 0f, screenWidth.toFloat()/4, screenHeight.toFloat(), blackPaint)
+        canvas.drawLine(screenWidth.toFloat()/2, 0f, screenWidth.toFloat()/2, screenHeight.toFloat(), blackPaint)
+        canvas.drawLine(3*screenWidth.toFloat()/4, 0f, 3*screenWidth.toFloat()/4, screenHeight.toFloat(), blackPaint)
+    }
+
+    fun drawScore(canvas: Canvas) {
         // refresh score
         canvas.drawText(score.toString(), screenWidth/2 - scoreSize/2, scoreSize, scorePaint)
     }
@@ -174,9 +197,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                         tempTiles = CopyOnWriteArrayList(tiles)
                         for (tile in tempTiles) {
                             if (tile.checkTouch(touchedX, touchedY)) {
-                                soundPool.play(tileSound, 1f, 1f,0,0, 1f)
+                                soundPool?.play(tileSound!!, 1f, 1f,0,0, 1f)
+                                vibrator?.vibrate(40)
+                                break
                             }
-                            else if(!tile.pressed && touchedY > tile.startY && touchedY < tile.endY) {
+                            else if(!tile.pressed && touchedY < tile.endY && touchedY > tile.startY) {
                                 // pressed wrong place
                                 if (touchedX < screenWidth/4) {
                                     tappedWrongTile = 0

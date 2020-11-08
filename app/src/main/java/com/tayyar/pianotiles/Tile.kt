@@ -15,7 +15,7 @@ import com.tayyar.pianotiles.GameView.Companion.screenHeight
 class Tile(blackPaint : Paint, private var pressedTileColor: Paint, private var redPaint: Paint, row : Int) {
 
     companion object {
-        var speed = 40
+        var speed = 30
     }
 
     private var startX: Int = 0
@@ -69,7 +69,7 @@ class Tile(blackPaint : Paint, private var pressedTileColor: Paint, private var 
     }
 
     fun checkTouch (x: Float, y: Float) : Boolean {
-        if (x > startX - screenWidth/30 && x < endX + screenWidth/30 && y > startY && y < endY && !pressed) {
+        if (x > startX - screenWidth/30 && x < endX + screenWidth/30 && y < endY && y > startY && !pressed) {
             tileColor = pressedTileColor
             GameView.score++
             pressed = true
