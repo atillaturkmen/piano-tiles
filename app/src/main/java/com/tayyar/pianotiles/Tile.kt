@@ -3,6 +3,8 @@ package com.tayyar.pianotiles
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import com.tayyar.pianotiles.GameView.Companion.screenWidth
+import com.tayyar.pianotiles.GameView.Companion.screenHeight
 
 /**
  * Tile Class.
@@ -24,13 +26,11 @@ class Tile(blackPaint : Paint, private var pressedTileColor: Paint, private var 
     var pressed: Boolean = false
 
     var outOfScreen = false
-    var outOfBounds = false
+    private var outOfBounds = false
     var gameOver = false
 
     private var tileColor = blackPaint
 
-    private val screenWidth = GameView.screenWidth
-    private val screenHeight = GameView.screenHeight
 
     init {
         startX = row * (screenWidth/4)

@@ -55,12 +55,12 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         thread = GameThread(holder, this)
 
         // color of the tiles
-        blackPaint.setColor(Color.BLACK)
-        grayPaint.setColor(Color.GRAY)
-        redPaint.setColor(Color.RED)
-        scorePaint.setColor(Color.CYAN)
+        blackPaint.color = Color.BLACK
+        grayPaint.color = Color.GRAY
+        redPaint.color = Color.RED
+        scorePaint.color = Color.CYAN
 
-        scorePaint.setTextSize(scoreSize)
+        scorePaint.textSize = scoreSize
 
         soundPool = SoundPool(6, AudioManager.STREAM_MUSIC, 0)
 
@@ -165,9 +165,9 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
-        event.getActionMasked().let { action ->
+        event.actionMasked.let { action ->
             if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
-                event.getActionIndex().let { index ->
+                event.actionIndex.let { index ->
                     if (Tile.speed > 0) {
                         touchedX = event.getX(index)
                         touchedY = event.getY(index)
