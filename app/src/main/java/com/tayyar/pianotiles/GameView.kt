@@ -1,0 +1,204 @@
+package com.tayyar.pianotiles
+
+import android.content.Context
+import android.content.res.Resources
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
+import android.media.AudioManager
+import android.media.SoundPool
+import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.SurfaceHolder
+import android.view.SurfaceView
+import java.util.LinkedList
+import java.util.concurrent.CopyOnWriteArrayList
+
+
+class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
+
+    private val thread: GameThread
+
+    private var tiles = LinkedList<Tile>()
+    private var tempTiles = CopyOnWriteArrayList<Tile>()
+
+    private var blackPaint = Paint()
+    private var grayPaint = Paint()
+    private var redPaint = Paint()
+    private var scorePaint = Paint()
+
+    private var row = -1
+    private var lastRow = -1
+
+    private var gameOver = false
+    private var tappedWrongTile = -1
+    private var startY = -1
+    private var endY = -1
+
+    private var touchedX = 0f
+    private var touchedY = 0f
+
+    private var scoreSize = 100f
+    private var backGroundColor = Color.WHITE
+
+    private var soundPool: SoundPool
+    private var failSound: Int
+    private var tileSound: Int
+
+    init {
+
+        // add callback
+        holder.addCallback(this)
+
+        // instantiate the game thread
+        thread = GameThread(holder, this)
+
+        // color of the tiles
+        blackPaint.setColor(Color.BLACK)
+        grayPaint.setColor(Color.GRAY)
+        redPaint.setColor(Color.RED)
+        scorePaint.setColor(Color.CYAN)
+
+        scorePaint.setTextSize(scoreSize)
+
+        soundPool = SoundPool(6, AudioManager.STREAM_MUSIC, 0)
+
+        failSound = soundPool.load(context, R.raw.failsound, 1)
+
+        tileSound = soundPool.load(context, R.raw.a, 1)
+
+    }
+
+    companion object {
+        var score = 0
+        val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+    }
+
+
+    override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
+
+        row = (0..3).random()
+
+        //game objects
+        tiles.add(Tile(blackPaint, grayPaint, redPaint, row))
+
+        lastRow = row
+
+        // start the game thread
+        thread.setRunning(true)
+        thread.start()
+    }
+
+    override fun surfaceChanged(surfaceHolder: SurfaceHolder, i: Int, i1: Int, i2: Int) {
+
+    }
+
+    override fun surfaceDestroyed(surfaceHolder: SurfaceHolder) {
+        var retry = true
+        while (retry) {
+            try {
+                thread.setRunning(false)
+                thread.join()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            retry = false
+        }
+    }
+
+    /**
+     * Everything that has to be drawn on Canvas
+     */
+    override fun draw(canvas: Canvas) {
+        super.draw(canvas)
+
+        // stop the game
+        if (gameOver) {
+            soundPool.play(failSound, 1f, 1f,0,0, 1f)
+            Tile.speed = 0
+            thread.setRunning(false)
+            //thread.join()
+        }
+
+        // paint the background
+        canvas.drawColor(backGroundColor)
+
+        // alignment lines
+        canvas.drawLine(screenWidth.toFloat()/4, 0f, screenWidth.toFloat()/4, screenHeight.toFloat(), blackPaint)
+        canvas.drawLine(screenWidth.toFloat()/2, 0f, screenWidth.toFloat()/2, screenHeight.toFloat(), blackPaint)
+        canvas.drawLine(3*screenWidth.toFloat()/4, 0f, 3*screenWidth.toFloat()/4, screenHeight.toFloat(), blackPaint)
+
+        // remove the tiles that are out of screen from tiles list
+        if (tiles.first.outOfScreen) {
+            tiles.poll()
+        }
+        // draw new tiles when last one is on the screen
+        if (tiles.last.startY >= 0) {
+            do {
+                row = (0..3).random()
+            } while (row == lastRow)
+
+            tiles.add(Tile(blackPaint, grayPaint, redPaint, row))
+
+            lastRow = row
+        }
+        // update and draw all tiles
+        for (tile in tiles) {
+            tile.update()
+            tile.draw(canvas)
+            if (tile.gameOver) {
+                gameOver = true
+            }
+        }
+        // draw red tile if pressed the wrong tile
+        when (tappedWrongTile) {
+            0 -> canvas.drawRect(Rect(0, startY, screenWidth/4, endY), redPaint)
+            1 -> canvas.drawRect(Rect(screenWidth/4, startY, screenWidth/2, endY), redPaint)
+            2 -> canvas.drawRect(Rect(screenWidth/2, startY, screenWidth*3/4, endY), redPaint)
+            3 -> canvas.drawRect(Rect(screenWidth*3/4, startY, screenWidth, endY), redPaint)
+        }
+        // refresh score
+        canvas.drawText(score.toString(), screenWidth/2 - scoreSize/2, scoreSize, scorePaint)
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+
+        event.getActionMasked().let { action ->
+            if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
+                event.getActionIndex().let { index ->
+                    if (Tile.speed > 0) {
+                        touchedX = event.getX(index)
+                        touchedY = event.getY(index)
+                        tempTiles = CopyOnWriteArrayList(tiles)
+                        for (tile in tempTiles) {
+                            if (tile.checkTouch(touchedX, touchedY)) {
+                                soundPool.play(tileSound, 1f, 1f,0,0, 1f)
+                            }
+                            else if(!tile.pressed && touchedY > tile.startY && touchedY < tile.endY) {
+                                // pressed wrong place
+                                if (touchedX < screenWidth/4) {
+                                    tappedWrongTile = 0
+                                }
+                                else if (touchedX < screenWidth/2) {
+                                    tappedWrongTile = 1
+                                }
+                                else if (touchedX < 3*screenWidth/4) {
+                                    tappedWrongTile = 2
+                                }
+                                else {
+                                    tappedWrongTile = 3
+                                }
+                                startY = tile.startY
+                                endY = tile.endY
+                                gameOver = true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true
+    }
+}
