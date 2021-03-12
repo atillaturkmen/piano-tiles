@@ -55,6 +55,9 @@ class GameThread(private val surfaceHolder: SurfaceHolder, private val gameView:
 
             timeMillis = (System.nanoTime() - startTime) / 1000000
             waitTime = targetTime - timeMillis
+            if (waitTime < 0) {
+                waitTime = 0
+            }
 
             try {
                 sleep(waitTime)

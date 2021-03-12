@@ -10,6 +10,7 @@ import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Vibrator
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -57,6 +58,15 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
         // instantiate the game thread
         thread = GameThread(holder, this)
 
+        score = 0
+
+        row = (0..3).random()
+
+        //game objects
+        tiles.add(Tile(blackPaint, grayPaint, redPaint, row))
+
+        lastRow = row
+
         // color of the tiles
         blackPaint.color = Color.BLACK
         grayPaint.color = Color.GRAY
@@ -91,15 +101,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
-
-        score = 0
-
-        row = (0..3).random()
-
-        //game objects
-        tiles.add(Tile(blackPaint, grayPaint, redPaint, row))
-
-        lastRow = row
+        Log.d("ati", "GameView surfaceCreated")
 
         // start the game thread
         thread.setRunning(true)
@@ -107,10 +109,12 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
     }
 
     override fun surfaceChanged(surfaceHolder: SurfaceHolder, i: Int, i1: Int, i2: Int) {
-
+        Log.d("ati", "GameView surfaceChanged")
     }
 
     override fun surfaceDestroyed(surfaceHolder: SurfaceHolder) {
+        Log.d("ati", "GameView surfaceDestroyed")
+        /*
         var retry = true
         while (retry) {
             try {
@@ -121,6 +125,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             }
             retry = false
         }
+        */
     }
 
     /**
@@ -134,7 +139,6 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
             soundPool?.play(failSound!!, 1f, 1f,0,0, 1f)
             Tile.speed = 0
             thread.setRunning(false)
-            //thread.join()
         }
 
         drawLines(canvas)
