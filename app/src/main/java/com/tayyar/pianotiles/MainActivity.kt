@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    fun startGame(view: View) {
+    fun startGame(@Suppress("UNUSED_PARAMETER")view: View) {
         val editText = findViewById<EditText>(R.id.editText)
         val musicBox = findViewById<CheckBox>(R.id.checkBox)
         val vibrationBox = findViewById<CheckBox>(R.id.checkBox2)
