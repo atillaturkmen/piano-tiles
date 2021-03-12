@@ -213,17 +213,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                             }
                             else if(!tile.pressed && touchedY < tile.endY && touchedY > tile.startY) {
                                 // pressed wrong place
-                                if (touchedX < screenWidth/4) {
-                                    tappedWrongTile = 0
-                                }
-                                else if (touchedX < screenWidth/2) {
-                                    tappedWrongTile = 1
-                                }
-                                else if (touchedX < 3*screenWidth/4) {
-                                    tappedWrongTile = 2
-                                }
-                                else {
-                                    tappedWrongTile = 3
+                                tappedWrongTile = when {
+                                    (touchedX < screenWidth/4) -> 0
+                                    (touchedX < screenWidth/2) -> 1
+                                    (touchedX < 3*screenWidth/4) -> 2
+                                    else -> 3
                                 }
                                 startY = tile.startY
                                 endY = tile.endY
