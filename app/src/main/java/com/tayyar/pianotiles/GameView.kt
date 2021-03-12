@@ -8,6 +8,8 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.media.AudioManager
 import android.media.SoundPool
+import android.os.Build
+import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.AttributeSet
 import android.util.Log
@@ -202,7 +204,11 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                         for (tile in tempTiles) {
                             if (tile.checkTouch(touchedX, touchedY)) {
                                 soundPool?.play(tileSound!!, 1f, 1f,0,0, 1f)
-                                vibrator?.vibrate(40)
+                                if (Build.VERSION.SDK_INT >= 26) {
+                                    vibrator?.vibrate(VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE))
+                                } else {
+                                    vibrator?.vibrate(40)
+                                }
                                 break
                             }
                             else if(!tile.pressed && touchedY < tile.endY && touchedY > tile.startY) {
