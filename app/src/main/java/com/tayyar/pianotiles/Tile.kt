@@ -9,7 +9,7 @@ import com.tayyar.pianotiles.GameView.Companion.screenHeight
 /**
  * Tile Class.
  * It goes from top to bottom
- * Purpose of the game is to press the tile
+ * The aim is to press the tiles
  */
 
 class Tile(blackPaint : Paint, private var pressedTileColor: Paint, private var redPaint: Paint, row : Int) {

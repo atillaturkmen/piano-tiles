@@ -77,7 +77,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
         scorePaint.textSize = scoreSize
 
-        if (music && soundPool == null) {
+        if (music) {
             soundPool = SoundPool(20, AudioManager.STREAM_MUSIC, 0)
             if (failSound == null) {
                 failSound = soundPool?.load(context, R.raw.failsound, 1)
@@ -207,6 +207,7 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
                                 if (Build.VERSION.SDK_INT >= 26) {
                                     vibrator?.vibrate(VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE))
                                 } else {
+                                    @Suppress("DEPRECATION")
                                     vibrator?.vibrate(40)
                                 }
                                 break
