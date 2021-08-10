@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -103,31 +102,16 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
-        Log.d("ati", "GameView surfaceCreated")
-
         // start the game thread
         thread.setRunning(true)
         thread.start()
     }
 
     override fun surfaceChanged(surfaceHolder: SurfaceHolder, i: Int, i1: Int, i2: Int) {
-        Log.d("ati", "GameView surfaceChanged")
     }
 
     override fun surfaceDestroyed(surfaceHolder: SurfaceHolder) {
-        Log.d("ati", "GameView surfaceDestroyed")
-        /*
-        var retry = true
-        while (retry) {
-            try {
-                thread.setRunning(false)
-                thread.join()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            retry = false
-        }
-        */
+        thread.setRunning(false)
     }
 
     /**
