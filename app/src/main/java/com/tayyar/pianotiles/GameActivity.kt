@@ -1,21 +1,11 @@
 package com.tayyar.pianotiles
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.WindowManager
 
-/**
- * This activity calls game view
- */
-class GameActivity : AppCompatActivity() {
+
+class GameActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.d("ati", "GameActivity onCreate")
-
-        // remove notification bar
-        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         val speed = intent.getStringExtra("speed")
         val music = intent.getBooleanExtra("music", true)
@@ -29,15 +19,5 @@ class GameActivity : AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_game)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("ati", "GameActivity onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("ati", "GameActivity onPause")
     }
 }
