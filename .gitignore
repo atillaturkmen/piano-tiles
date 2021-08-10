@@ -12,3 +12,7 @@
 /captures
 .externalNativeBuild
 .cxx
+release
+/.idea/jarRepositories.xml
+/.idea/compiler.xml
+/.idea/misc.xml
