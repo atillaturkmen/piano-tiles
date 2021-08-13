@@ -11,7 +11,7 @@ import android.media.SoundPool
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -19,7 +19,7 @@ import java.util.LinkedList
 import java.util.concurrent.CopyOnWriteArrayList
 
 
-class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context, attributes), SurfaceHolder.Callback {
+class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     private val thread: GameThread
 
@@ -46,6 +46,8 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
     private var scoreSize = 100f
     private var backGroundColor = Color.WHITE
+
+    private var started = false
 
     private var soundPool: SoundPool? = null
     private var failSound: Int? = null
@@ -102,21 +104,31 @@ class GameView(context: Context, attributes: AttributeSet) : SurfaceView(context
 
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
-        // start the game thread
+        Log.d("ati, ","created")
         thread.setRunning(true)
-        thread.start()
+        if (!started) {
+            // start the game thread
+            Log.d("ati, ","started")
+            thread.start()
+            started = true
+        }
     }
 
     override fun surfaceChanged(surfaceHolder: SurfaceHolder, i: Int, i1: Int, i2: Int) {
+        Log.d("ati, ","changed")
     }
 
-    override fun surfaceDestroyed(surfaceHolder: SurfaceHolder) {
+    override fun surfaceDestroyed(p0: SurfaceHolder) {
+        Log.d("ati, ","destroyed")
         thread.setRunning(false)
     }
 
-    /**
-     * Everything that has to be drawn on Canvas
-     */
+    fun destroy() {
+        soundPool?.release()
+        soundPool = null
+    }
+
+    /** Everything that has to be drawn on Canvas */
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
 
