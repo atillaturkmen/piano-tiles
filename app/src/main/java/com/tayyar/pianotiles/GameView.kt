@@ -49,6 +49,8 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
     private var started = false
 
+    private var initialSpeed: Int = Tile.speed
+
     private var soundPool: SoundPool? = null
     private var failSound: Int? = null
     private var tileSound: Int? = null
@@ -120,12 +122,25 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
     override fun surfaceDestroyed(p0: SurfaceHolder) {
         Log.d("ati, ","destroyed")
+        saveIfHighScore(initialSpeed, score)
         thread.setRunning(false)
     }
 
     fun destroy() {
         soundPool?.release()
         soundPool = null
+    }
+
+    /** Save the score to shared preferences */
+    private fun saveIfHighScore(speed: Int, score: Int) {
+        val sharedPref = context?.getSharedPreferences("com.tayyar.pianotiles.high_scores", Context.MODE_PRIVATE) ?: return
+        val highScore = sharedPref.getInt(speed.toString(), 0)
+        if (highScore < score) {
+            with (sharedPref.edit()) {
+                putInt(speed.toString(), score)
+                apply()
+            }
+        }
     }
 
     /** Everything that has to be drawn on Canvas */
