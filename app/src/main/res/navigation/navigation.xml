@@ -8,15 +8,11 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.tayyar.pianotiles.MainFragment"
-        android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
-        <action
-            android:id="@+id/action_mainFragment_to_highScoresFragment"
-            app:destination="@id/highScoresFragment" />
-    </fragment>
+        android:label=""
+        tools:layout="@layout/fragment_main" />
     <fragment
         android:id="@+id/highScoresFragment"
         android:name="com.tayyar.pianotiles.HighScoresFragment"
-        android:label="fragment_high_scores"
+        android:label="High Scores"
         tools:layout="@layout/fragment_high_scores" />
 </navigation>

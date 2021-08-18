@@ -1,14 +1,17 @@
 package com.tayyar.pianotiles.game
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import com.tayyar.pianotiles.BaseActivity
+import android.view.WindowInsets
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import com.tayyar.pianotiles.R
 
 
-class GameActivity : BaseActivity() {
+class GameActivity : AppCompatActivity() {
 
     lateinit var gameView: GameView
 
@@ -16,6 +19,17 @@ class GameActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         Log.d("ati", "activity created")
+
+        // remove notification bar
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
 
         setContentView(R.layout.activity_game)
 
