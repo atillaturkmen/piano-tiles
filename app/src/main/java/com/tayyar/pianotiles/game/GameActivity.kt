@@ -1,9 +1,11 @@
-package com.tayyar.pianotiles
+package com.tayyar.pianotiles.game
 
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import com.tayyar.pianotiles.BaseActivity
+import com.tayyar.pianotiles.R
 
 
 class GameActivity : BaseActivity() {

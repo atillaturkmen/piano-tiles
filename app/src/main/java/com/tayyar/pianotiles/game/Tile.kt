@@ -1,10 +1,10 @@
-package com.tayyar.pianotiles
+package com.tayyar.pianotiles.game
 
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import com.tayyar.pianotiles.GameView.Companion.screenWidth
-import com.tayyar.pianotiles.GameView.Companion.screenHeight
+import com.tayyar.pianotiles.game.GameView.Companion.screenWidth
+import com.tayyar.pianotiles.game.GameView.Companion.screenHeight
 
 /**
  * Tile Class.

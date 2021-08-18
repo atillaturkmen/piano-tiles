@@ -1,4 +1,4 @@
-package com.tayyar.pianotiles
+package com.tayyar.pianotiles.game
 
 import android.graphics.Canvas
 import android.view.SurfaceHolder

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.tayyar.pianotiles.databinding.FragmentMainBinding
+import com.tayyar.pianotiles.game.GameActivity
 
 /** Homepage of the app */
 class MainFragment : Fragment() {

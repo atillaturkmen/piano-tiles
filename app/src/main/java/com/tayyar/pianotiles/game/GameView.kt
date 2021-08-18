@@ -1,4 +1,4 @@
-package com.tayyar.pianotiles
+package com.tayyar.pianotiles.game
 
 import android.content.Context
 import android.content.res.Resources
@@ -15,6 +15,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.tayyar.pianotiles.R
 import java.util.LinkedList
 import java.util.concurrent.CopyOnWriteArrayList
 
