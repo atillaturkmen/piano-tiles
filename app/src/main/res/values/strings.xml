@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">Piano Tiles</string>
+    <string name="shared_preferences_name">com.tayyar.pianotiles.high_scores</string>
 
-    <string name="title_activity_game">GameActivity</string>
     <string name="input">Game Speed:</string>
     <string name="start">START</string>
     <string name="speed_advice">Easy:\u00A020 Normal:\u00A030 Hard:\u00A040</string> <!-- \u00A0 is non breaking space in unicode -->
     <string name="game_speed">30</string>
     <string name="music">Music</string>
     <string name="vibration">Vibration</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -15,31 +15,12 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         // get high scores and show them as a toast
-        val sharedPref = getSharedPreferences("com.tayyar.pianotiles.high_scores", MODE_PRIVATE) ?: return
+        val sharedPref = getSharedPreferences(
+            getString(R.string.shared_preferences_name),
+            MODE_PRIVATE
+        ) ?: return
         val highScore = sharedPref.all.toSortedMap()
         Toast.makeText(this, "High Scores: \n$highScore", Toast.LENGTH_LONG).show()
-
-        // Add on click listener to the button to start the game
-        findViewById<Button>(R.id.button).setOnClickListener {
-            val editText = findViewById<EditText>(R.id.editText)
-            val musicBox = findViewById<CheckBox>(R.id.checkBox)
-            val vibrationBox = findViewById<CheckBox>(R.id.checkBox2)
-
-            val speed = editText.text.toString()
-            val music = musicBox.isChecked
-            val vibration = vibrationBox.isChecked
-
-            if (speed == "" || speed == "0") {
-                Toast.makeText(this, "You have to select a speed", Toast.LENGTH_SHORT).show()
-            } else {
-                val intent = Intent(this, GameActivity::class.java).apply {
-                    putExtra("speed", speed)
-                    putExtra("music", music)
-                    putExtra("vibration", vibration)
-                }
-                startActivity(intent)
-            }
-        }
     }
 
 }

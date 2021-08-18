@@ -106,22 +106,22 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
-        Log.d("ati, ","created")
+        Log.d("ati, ", "surface created")
         thread.setRunning(true)
         if (!started) {
             // start the game thread
-            Log.d("ati, ","started")
+            Log.d("ati, ", "started")
             thread.start()
             started = true
         }
     }
 
     override fun surfaceChanged(surfaceHolder: SurfaceHolder, i: Int, i1: Int, i2: Int) {
-        Log.d("ati, ","changed")
+        Log.d("ati, ", "surface changed")
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder) {
-        Log.d("ati, ","destroyed")
+        Log.d("ati, ", "surface destroyed")
         saveIfHighScore(initialSpeed, score)
         thread.setRunning(false)
     }
@@ -131,12 +131,15 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
         soundPool = null
     }
 
-    /** Save the score to shared preferences */
+    /** Save the score to shared preferences if it is greater than the best score */
     private fun saveIfHighScore(speed: Int, score: Int) {
-        val sharedPref = context?.getSharedPreferences("com.tayyar.pianotiles.high_scores", Context.MODE_PRIVATE) ?: return
+        val sharedPref = context?.getSharedPreferences(
+            context.getString(R.string.shared_preferences_name),
+            Context.MODE_PRIVATE
+        ) ?: return
         val highScore = sharedPref.getInt(speed.toString(), 0)
         if (highScore < score) {
-            with (sharedPref.edit()) {
+            with(sharedPref.edit()) {
                 putInt(speed.toString(), score)
                 apply()
             }
@@ -149,7 +152,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
         // stop the game
         if (gameOver) {
-            soundPool?.play(failSound!!, 1f, 1f,0,0, 1f)
+            soundPool?.play(failSound!!, 1f, 1f, 0, 0, 1f)
             Tile.speed = 0
             thread.setRunning(false)
         }
@@ -180,10 +183,10 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
         }
         // draw red tile if pressed the wrong tile
         when (tappedWrongTile) {
-            0 -> canvas.drawRect(Rect(0, startY, screenWidth/4, endY), redPaint)
-            1 -> canvas.drawRect(Rect(screenWidth/4, startY, screenWidth/2, endY), redPaint)
-            2 -> canvas.drawRect(Rect(screenWidth/2, startY, screenWidth*3/4, endY), redPaint)
-            3 -> canvas.drawRect(Rect(screenWidth*3/4, startY, screenWidth, endY), redPaint)
+            0 -> canvas.drawRect(Rect(0, startY, screenWidth / 4, endY), redPaint)
+            1 -> canvas.drawRect(Rect(screenWidth / 4, startY, screenWidth / 2, endY), redPaint)
+            2 -> canvas.drawRect(Rect(screenWidth / 2, startY, screenWidth * 3 / 4, endY), redPaint)
+            3 -> canvas.drawRect(Rect(screenWidth * 3 / 4, startY, screenWidth, endY), redPaint)
         }
         drawScore(canvas)
     }
@@ -193,14 +196,32 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
         canvas.drawColor(backGroundColor)
 
         // alignment lines
-        canvas.drawLine(screenWidth.toFloat()/4, 0f, screenWidth.toFloat()/4, screenHeight.toFloat(), blackPaint)
-        canvas.drawLine(screenWidth.toFloat()/2, 0f, screenWidth.toFloat()/2, screenHeight.toFloat(), blackPaint)
-        canvas.drawLine(3*screenWidth.toFloat()/4, 0f, 3*screenWidth.toFloat()/4, screenHeight.toFloat(), blackPaint)
+        canvas.drawLine(
+            screenWidth.toFloat() / 4,
+            0f,
+            screenWidth.toFloat() / 4,
+            screenHeight.toFloat(),
+            blackPaint
+        )
+        canvas.drawLine(
+            screenWidth.toFloat() / 2,
+            0f,
+            screenWidth.toFloat() / 2,
+            screenHeight.toFloat(),
+            blackPaint
+        )
+        canvas.drawLine(
+            3 * screenWidth.toFloat() / 4,
+            0f,
+            3 * screenWidth.toFloat() / 4,
+            screenHeight.toFloat(),
+            blackPaint
+        )
     }
 
     fun drawScore(canvas: Canvas) {
         // refresh score
-        canvas.drawText(score.toString(), screenWidth/2 - scoreSize/2, scoreSize, scorePaint)
+        canvas.drawText(score.toString(), screenWidth / 2 - scoreSize / 2, scoreSize, scorePaint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -214,20 +235,24 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
                         tempTiles = CopyOnWriteArrayList(tiles)
                         for (tile in tempTiles) {
                             if (tile.checkTouch(touchedX, touchedY)) {
-                                soundPool?.play(tileSound!!, 1f, 1f,0,0, 1f)
+                                soundPool?.play(tileSound!!, 1f, 1f, 0, 0, 1f)
                                 if (Build.VERSION.SDK_INT >= 26) {
-                                    vibrator?.vibrate(VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE))
+                                    vibrator?.vibrate(
+                                        VibrationEffect.createOneShot(
+                                            40,
+                                            VibrationEffect.DEFAULT_AMPLITUDE
+                                        )
+                                    )
                                 } else {
                                     vibrator?.vibrate(40)
                                 }
                                 break
-                            }
-                            else if(!tile.pressed && touchedY < tile.endY && touchedY > tile.startY) {
+                            } else if (!tile.pressed && touchedY < tile.endY && touchedY > tile.startY) {
                                 // pressed wrong place
                                 tappedWrongTile = when {
-                                    (touchedX < screenWidth/4) -> 0
-                                    (touchedX < screenWidth/2) -> 1
-                                    (touchedX < 3*screenWidth/4) -> 2
+                                    (touchedX < screenWidth / 4) -> 0
+                                    (touchedX < screenWidth / 2) -> 1
+                                    (touchedX < 3 * screenWidth / 4) -> 2
                                     else -> 3
                                 }
                                 startY = tile.startY
