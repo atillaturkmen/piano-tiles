@@ -8,7 +8,7 @@
     <string name="game_speed">30</string>
     <string name="music">Music</string>
     <string name="vibration">Vibration</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="high_scores">High Scores</string>
+    <string name="speed">Speed</string>
+    <string name="highest_score">Highest Score</string>
 </resources>
