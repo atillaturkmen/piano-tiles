@@ -16,7 +16,7 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.tayyar.pianotiles.R
-import java.util.LinkedList
+import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 
 
@@ -55,6 +55,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
     private var soundPool: SoundPool? = null
     private var failSound: Int? = null
     private var tileSound: Int? = null
+    private var playingSound: Int? = null
 
     init {
 
@@ -132,6 +133,23 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
         soundPool = null
     }
 
+    fun restart() {
+        if (playingSound != null) {
+            soundPool?.stop(playingSound!!)
+        }
+        (context as GameActivity).hideReplayButton()
+        Tile.speed = initialSpeed
+        tiles.clear()
+        score = 0
+        tappedWrongTile = -1
+        row = (0..3).random()
+        //game objects
+        tiles.add(Tile(blackPaint, grayPaint, redPaint, row))
+        lastRow = row
+        gameOver = false
+        thread.setRunning(true)
+    }
+
     /** Save the score to shared preferences if it is greater than the best score */
     private fun saveIfHighScore(speed: Int, score: Int) {
         val sharedPref = context?.getSharedPreferences(
@@ -153,9 +171,11 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
         // stop the game
         if (gameOver) {
-            soundPool?.play(failSound!!, 1f, 1f, 0, 0, 1f)
+            playingSound = soundPool?.play(failSound!!, 1f, 1f, 0, 0, 1f)
             Tile.speed = 0
             thread.setRunning(false)
+            saveIfHighScore(initialSpeed, score)
+            (context as GameActivity).showReplayButton()
         }
 
         drawLines(canvas)
@@ -236,7 +256,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
                         tempTiles = CopyOnWriteArrayList(tiles)
                         for (tile in tempTiles) {
                             if (tile.checkTouch(touchedX, touchedY)) {
-                                soundPool?.play(tileSound!!, 1f, 1f, 0, 0, 1f)
+                                playingSound = soundPool?.play(tileSound!!, 1f, 1f, 0, 0, 1f)
                                 if (Build.VERSION.SDK_INT >= 26) {
                                     vibrator?.vibrate(
                                         VibrationEffect.createOneShot(

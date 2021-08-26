@@ -3,17 +3,15 @@ package com.tayyar.pianotiles.game
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowInsets
-import android.view.WindowManager
+import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.tayyar.pianotiles.R
 
-
 class GameActivity : AppCompatActivity() {
 
-    lateinit var gameView: GameView
+    private lateinit var gameView: GameView
+    private lateinit var img: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +51,24 @@ class GameActivity : AppCompatActivity() {
             )
         screen.addView(gameView)
 
+        img = layoutInflater.inflate(R.layout.centered_image, screen, false)
+        img.visibility = View.GONE
+        img.setOnClickListener {
+            gameView.restart()
+        }
+        screen.addView(img)
+    }
+
+    fun showReplayButton() {
+        this@GameActivity.runOnUiThread {
+            img.visibility = View.VISIBLE
+        }
+    }
+
+    fun hideReplayButton() {
+        this@GameActivity.runOnUiThread {
+            img.visibility = View.GONE
+        }
     }
 
     override fun onPause() {
