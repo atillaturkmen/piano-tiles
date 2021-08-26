@@ -38,6 +38,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
     private var lastRow = -1
 
     private var gameOver = false
+    private var gameOverOver = false // true after game over sound is played
     private var tappedWrongTile = -1
     private var startY = -1
     private var endY = -1
@@ -147,6 +148,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
         tiles.add(Tile(blackPaint, grayPaint, redPaint, row))
         lastRow = row
         gameOver = false
+        gameOverOver = false
         thread.setRunning(true)
     }
 
@@ -170,12 +172,14 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
         super.draw(canvas)
 
         // stop the game
-        if (gameOver) {
+        if (gameOver && !gameOverOver) {
+            Log.d("heyyy", "game over")
             playingSound = soundPool?.play(failSound!!, 1f, 1f, 0, 0, 1f)
             Tile.speed = 0
             thread.setRunning(false)
             saveIfHighScore(initialSpeed, score)
             (context as GameActivity).showReplayButton()
+            gameOverOver = true
         }
 
         drawLines(canvas)
