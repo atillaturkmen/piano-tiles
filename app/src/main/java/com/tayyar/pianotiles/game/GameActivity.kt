@@ -17,17 +17,6 @@ class GameActivity : AppCompatActivity() {
 
         Log.d("ati", "activity created")
 
-        // remove notification bar
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
-
         setContentView(R.layout.activity_game)
 
         val speed = intent.getStringExtra("speed")
@@ -56,6 +45,17 @@ class GameActivity : AppCompatActivity() {
             gameView.restart()
         }
         screen.addView(img)
+
+        // remove notification bar
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
     }
 
     fun showReplayButton() {
