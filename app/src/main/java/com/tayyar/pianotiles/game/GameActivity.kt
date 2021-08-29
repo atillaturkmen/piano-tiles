@@ -2,7 +2,6 @@ package com.tayyar.pianotiles.game
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import com.tayyar.pianotiles.R
@@ -14,8 +13,6 @@ class GameActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.d("ati", "activity created")
 
         setContentView(R.layout.activity_game)
 
@@ -70,18 +67,7 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    override fun onPause() {
-        Log.d("ati", "activity paused")
-        super.onPause()
-    }
-
-    override fun onResume() {
-        Log.d("ati", "activity resumed")
-        super.onResume()
-    }
-
     override fun onDestroy() {
-        Log.d("ati", "activity destroyed")
         gameView.destroy()
         super.onDestroy()
     }

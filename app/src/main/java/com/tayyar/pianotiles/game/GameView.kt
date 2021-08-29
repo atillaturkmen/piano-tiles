@@ -11,7 +11,6 @@ import android.media.SoundPool
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -109,22 +108,18 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
 
     override fun surfaceCreated(surfaceHolder: SurfaceHolder) {
-        Log.d("ati, ", "surface created")
         thread.setRunning(true)
         if (!started) {
             // start the game thread
-            Log.d("ati, ", "started")
             thread.start()
             started = true
         }
     }
 
     override fun surfaceChanged(surfaceHolder: SurfaceHolder, i: Int, i1: Int, i2: Int) {
-        Log.d("ati, ", "surface changed")
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder) {
-        Log.d("ati, ", "surface destroyed")
         saveIfHighScore(initialSpeed, score)
         thread.setRunning(false)
     }
