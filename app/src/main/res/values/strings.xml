@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Piano Tiles</string>
+    <string name="app_name">Tile Tap</string>
     <string name="shared_preferences_name">com.tayyar.pianotiles.high_scores</string>
 
     <string name="input">Game Speed:</string>
