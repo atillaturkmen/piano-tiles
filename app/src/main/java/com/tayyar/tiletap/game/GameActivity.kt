@@ -1,10 +1,10 @@
-package com.tayyar.pianotiles.game
+package com.tayyar.tiletap.game
 
 import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import com.tayyar.pianotiles.R
+import com.tayyar.tiletap.R
 
 class GameActivity : AppCompatActivity() {
 

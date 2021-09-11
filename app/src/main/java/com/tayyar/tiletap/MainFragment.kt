@@ -1,4 +1,4 @@
-package com.tayyar.pianotiles
+package com.tayyar.tiletap
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.tayyar.pianotiles.databinding.FragmentMainBinding
-import com.tayyar.pianotiles.game.GameActivity
+import com.tayyar.tiletap.databinding.FragmentMainBinding
+import com.tayyar.tiletap.game.GameActivity
 
 /** Homepage of the app */
 class MainFragment : Fragment() {

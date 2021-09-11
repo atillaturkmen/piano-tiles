@@ -1,4 +1,4 @@
-package com.tayyar.pianotiles
+package com.tayyar.tiletap
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.tayyar.pianotiles.databinding.FragmentHighScoresBinding
+import com.tayyar.tiletap.databinding.FragmentHighScoresBinding
 
 /** Shows high scores */
 class HighScoresFragment : Fragment() {

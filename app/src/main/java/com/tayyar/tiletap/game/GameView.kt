@@ -1,4 +1,4 @@
-package com.tayyar.pianotiles.game
+package com.tayyar.tiletap.game
 
 import android.content.Context
 import android.content.res.Resources
@@ -14,7 +14,7 @@ import android.os.Vibrator
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.tayyar.pianotiles.R
+import com.tayyar.tiletap.R
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 

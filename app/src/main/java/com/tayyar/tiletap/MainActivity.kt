@@ -1,4 +1,4 @@
-package com.tayyar.pianotiles
+package com.tayyar.tiletap
 
 import android.os.Bundle
 import android.view.MotionEvent
@@ -9,7 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.tayyar.pianotiles.databinding.ActivityMainBinding
+import com.tayyar.tiletap.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
