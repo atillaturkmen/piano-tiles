@@ -3,8 +3,10 @@ package com.tayyar.tiletap.game
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
+import android.util.Log
 import com.tayyar.tiletap.game.GameView.Companion.screenWidth
 import com.tayyar.tiletap.game.GameView.Companion.screenHeight
+import kotlin.math.roundToInt
 
 /**
  * Tile Class.
@@ -15,7 +17,8 @@ import com.tayyar.tiletap.game.GameView.Companion.screenHeight
 class Tile(blackPaint : Paint, private var pressedTileColor: Paint, private var redPaint: Paint, row : Int) {
 
     companion object {
-        var speed = 30
+        var speed = 30.0
+        var speedIncrease = false
     }
 
     private var startX: Int = 0
@@ -49,13 +52,13 @@ class Tile(blackPaint : Paint, private var pressedTileColor: Paint, private var 
     /**
      * update properties for the game object
      */
-    fun update() {
+    fun update(frameNo: Int) {
 
         //stop the tile if it reaches the end
-        if (startY >= screenHeight && !pressed) {
+        if (false) {
             tileColor = redPaint
             outOfBounds = true
-            speed = -40
+            speed = -40.0
         }
         if (outOfBounds && endY <= screenHeight) {
             gameOver = true
@@ -63,8 +66,12 @@ class Tile(blackPaint : Paint, private var pressedTileColor: Paint, private var 
         if (startY >= screenHeight && pressed) {
             outOfScreen = true
         }
-        startY += (speed)
-        endY += (speed)
+        Log.d("atii", speed.toString())
+        if (speedIncrease && speed != 0.0 && frameNo % 60 == 0 && speed < 50) {
+            speed += 1 / (speed * 20)
+        }
+        startY += (speed.roundToInt())
+        endY += (speed.roundToInt())
 
     }
 

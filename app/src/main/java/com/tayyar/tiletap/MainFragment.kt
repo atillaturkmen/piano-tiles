@@ -20,10 +20,11 @@ class MainFragment : Fragment() {
         val binding: FragmentMainBinding = FragmentMainBinding.inflate(inflater, container, false)
 
         // Add on click listener to the button to start the game
-        binding.button.setOnClickListener {
-            val speed = binding.editText.text.toString()
+        binding.startButton.setOnClickListener {
+            val speed = binding.speedInput.text.toString()
             val music = binding.musicBox.isChecked
             val vibration = binding.vibrationBox.isChecked
+            val speedIncrease = binding.speedIncreaseBox.isChecked
 
             if (speed == "" || speed == "0") {
                 Toast.makeText(context, "You have to select a speed", Toast.LENGTH_SHORT).show()
@@ -32,6 +33,7 @@ class MainFragment : Fragment() {
                     putExtra("speed", speed)
                     putExtra("music", music)
                     putExtra("vibration", vibration)
+                    putExtra("speedIncrease", speedIncrease)
                 }
                 startActivity(intent)
             }

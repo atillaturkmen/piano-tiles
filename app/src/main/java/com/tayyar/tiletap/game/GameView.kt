@@ -50,12 +50,12 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
     private var started = false
 
-    private var initialSpeed: Int = Tile.speed
-
     private var soundPool: SoundPool? = null
     private var failSound: Int? = null
     private var tileSound: Int? = null
     private var playingSound: Int? = null
+
+    private var frameNo = 0
 
     init {
 
@@ -104,6 +104,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
         val screenHeight = Resources.getSystem().displayMetrics.heightPixels
         var music = true
         var vibration = true
+        var initialSpeed = 30
     }
 
 
@@ -134,7 +135,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
             soundPool?.stop(playingSound!!)
         }
         (context as GameActivity).hideReplayButton()
-        Tile.speed = initialSpeed
+        Tile.speed = initialSpeed.toDouble()
         tiles.clear()
         score = 0
         tappedWrongTile = -1
@@ -166,10 +167,12 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
 
+        frameNo++
+
         // stop the game
-        if (gameOver && !gameOverOver) {
+        if (false) {
             playingSound = soundPool?.play(failSound!!, 1f, 1f, 0, 0, 1f)
-            Tile.speed = 0
+            Tile.speed = 0.0
             thread.setRunning(false)
             saveIfHighScore(initialSpeed, score)
             (context as GameActivity).showReplayButton()
@@ -194,7 +197,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
         }
         // update and draw all tiles
         for (tile in tiles) {
-            tile.update()
+            tile.update(frameNo)
             tile.draw(canvas)
             if (tile.gameOver) {
                 gameOver = true

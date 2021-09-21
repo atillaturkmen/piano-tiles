@@ -21,9 +21,11 @@ class GameActivity : AppCompatActivity() {
         val speed = intent.getStringExtra("speed")
         val music = intent.getBooleanExtra("music", true)
         val vibration = intent.getBooleanExtra("vibration", true)
+        val speedIncrease = intent.getBooleanExtra("speedIncrease", false)
 
         GameView.music = music
         GameView.vibration = vibration
+        Tile.speedIncrease = speedIncrease
 
         // set tile speed according to resolution
         val displayMetrics = DisplayMetrics()
@@ -34,7 +36,8 @@ class GameActivity : AppCompatActivity() {
             windowManager.defaultDisplay.getMetrics(displayMetrics)
         }
         val height = displayMetrics.heightPixels
-        Tile.speed = speed!!.toInt() * height / 1280
+        Tile.speed = speed!!.toDouble() * height / 1280
+        GameView.initialSpeed = speed.toInt()
 
         // add game view
         val screen = (findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0) as ViewGroup
