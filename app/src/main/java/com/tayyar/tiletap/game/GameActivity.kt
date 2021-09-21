@@ -2,6 +2,7 @@ package com.tayyar.tiletap.game
 
 import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import com.tayyar.tiletap.R
@@ -16,6 +17,7 @@ class GameActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_game)
 
+        // set customizable options
         val speed = intent.getStringExtra("speed")
         val music = intent.getBooleanExtra("music", true)
         val vibration = intent.getBooleanExtra("vibration", true)
@@ -23,10 +25,18 @@ class GameActivity : AppCompatActivity() {
         GameView.music = music
         GameView.vibration = vibration
 
-        if (speed != "") {
-            Tile.speed = speed!!.toInt()
+        // set tile speed according to resolution
+        val displayMetrics = DisplayMetrics()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            display?.getRealMetrics(displayMetrics)
+        } else {
+            @Suppress("DEPRECATION")
+            windowManager.defaultDisplay.getMetrics(displayMetrics)
         }
+        val height = displayMetrics.heightPixels
+        Tile.speed = speed!!.toInt() * height / 1280
 
+        // add game view
         val screen = (findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0) as ViewGroup
         gameView = GameView(this)
         gameView.layoutParams =
@@ -36,6 +46,7 @@ class GameActivity : AppCompatActivity() {
             )
         screen.addView(gameView)
 
+        // set restart button
         img = layoutInflater.inflate(R.layout.centered_image, screen, false)
         img.visibility = View.GONE
         img.setOnClickListener {
