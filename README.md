@@ -47,4 +47,4 @@ Contributions to this game project are welcome! If you'd like to contribute new 
 
 ## License
 
-This game is distributed under MIT license. See the LICENSE file for details.
+This game is distributed under GNU General Public License. See the LICENSE file for details.
