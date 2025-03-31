@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         // menu can only be opened in main menu
         navController.addOnDestinationChangedListener { controller, destination, _ ->
-            if (destination.id == controller.graph.startDestination) {
+            if (destination.id == controller.graph.startDestinationId) {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
