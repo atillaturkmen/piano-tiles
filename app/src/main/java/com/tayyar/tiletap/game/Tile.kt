@@ -55,7 +55,7 @@ class Tile(blackPaint : Paint, private var pressedTileColor: Paint, private var 
     fun update(frameNo: Int) {
 
         //stop the tile if it reaches the end
-        if (false) {
+        if (startY >= screenHeight && !pressed) {
             tileColor = redPaint
             outOfBounds = true
             speed = -40.0

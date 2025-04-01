@@ -170,7 +170,7 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
         frameNo++
 
         // stop the game
-        if (false) {
+        if (gameOver && !gameOverOver) {
             playingSound = soundPool?.play(failSound!!, 1f, 1f, 0, 0, 1f)
             Tile.speed = 0.0
             thread.setRunning(false)
