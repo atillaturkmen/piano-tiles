@@ -2,8 +2,6 @@
 
 Piano Tiles is a classic rhythm game with adjustable speed options available right from the start. Enjoy an ad-free and lightweight gaming experience in this engaging and challenging musical game.
 
-**[Download from Google Play Store](https://play.google.com/store/apps/details?id=com.tayyar.tiletap)**
-
 ## Screenshots
 
 Explore the game through these screenshots:
